@@ -17,4 +17,11 @@
         WHERE email = #{email} AND authCd = #{authCd}
     </update>
 
+    <select id="selUser" resultType="UserEntity">
+        SELECT *
+        FROM t_user
+        WHERE email = #{email}
+        AND authCd IS NULL
+    </select>
+
 </mapper>

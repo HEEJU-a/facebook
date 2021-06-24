@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/user")
@@ -35,5 +36,19 @@ public class UserController {
     public String auth(UserEntity param){
         int result = service.auth(param);
         return "redirect:login?auth=" + result;
+    }
+
+//    @PostMapping("/login")
+//    public String loginProc(UserEntity param){
+//        return service.login(param);
+//    }
+
+    @GetMapping("/profile")
+    public void profile(){}
+
+    @PostMapping("/profileImg")
+    public String profileImg(MultipartFile[] imgArr){
+        service.profileImg(imgArr);
+        return "redirect:profile";
     }
 }

@@ -2,11 +2,17 @@ package com.koreait.facebook.user;
 
 import com.koreait.facebook.common.EmailService;
 import com.koreait.facebook.common.EmailServiceImpl;
+import com.koreait.facebook.common.MyFileUtils;
 import com.koreait.facebook.common.MySecurityUtils;
+import com.koreait.facebook.security.IAuthenticationFacade;
 import com.koreait.facebook.user.model.UserEntity;
-import org.mindrot.jbcrypt.BCrypt;
+//mport org.mindrot.jbcrypt.BCrypt;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UserService {
@@ -19,11 +25,21 @@ public class UserService {
     @Autowired
     private UserMapper mapper;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private IAuthenticationFacade auth;
+
+    @Autowired
+    private MyFileUtils myFileUtils;
+
     public int join(UserEntity param){
 
         String authCd = secUtils.getRandomDigit(5);
         //비밀번호 암호화
-        String hashedPw = BCrypt.hashpw(param.getPw(), BCrypt.gensalt());
+      //  String hashedPw = BCrypt.hashpw(param.getPw(), BCrypt.gensalt());
+        String hashedPw = passwordEncoder.encode(param.getPw());
         param.setPw(hashedPw);
         param.setAuthCd(authCd);
         int result =  mapper.join(param);
@@ -49,4 +65,19 @@ public class UserService {
 //        email.sendSimpleMessage(to, subject, txt);
 //
 //    }
+
+//    //로그인
+//    public String login(UserEntity param){
+//        UserEntity loginUser = mapper.selUser(param);
+//        return"";
+//    }
+    public void profileImg(MultipartFile[] imgArr){
+        int iuser = auth.getLoginUserPk();
+        System.out.println("iuser : " + iuser);
+        String target = "profile/" + iuser;
+        System.out.println(imgArr);
+        for(MultipartFile img : imgArr){
+            String saveFileNm = myFileUtils.transferTo(img, target);
+        }
+    }
 }
