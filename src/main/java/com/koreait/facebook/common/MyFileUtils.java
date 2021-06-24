@@ -56,10 +56,10 @@ public class MyFileUtils {
         //"C:/springImg/profile/10"
         System.out.println("basepath : "+basePath);
         makeFolders(basePath); //(폴더가 없을 수 있기 때문에) 폴더를 만들어준다
-        File file = new File(basePath, fileNm);
+        File saveFile = new File(basePath, fileNm);
         try {
             // File file = new File(basePath, fileNm); ->밖에 있어도 안에 있어도 상관없다
-            mf.transferTo(file);
+            mf.transferTo(saveFile);
             return fileNm;
         } catch (Exception e) {
             e.printStackTrace();

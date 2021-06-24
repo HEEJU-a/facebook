@@ -7,6 +7,7 @@ import com.koreait.facebook.common.MySecurityUtils;
 import com.koreait.facebook.security.IAuthenticationFacade;
 import com.koreait.facebook.user.model.UserEntity;
 //mport org.mindrot.jbcrypt.BCrypt;
+import com.koreait.facebook.user.model.UserProfileEntity;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class UserService {
 
     @Autowired
     private MyFileUtils myFileUtils;
+
+    @Autowired
+    private UserProfileMapper userprofilemapper;
 
     public int join(UserEntity param){
 
@@ -72,12 +76,34 @@ public class UserService {
 //        return"";
 //    }
     public void profileImg(MultipartFile[] imgArr){
-        int iuser = auth.getLoginUserPk();
-        System.out.println("iuser : " + iuser);
+        UserEntity loginUser = auth.getLoginUser();
+        int iuser = loginUser.getIuser();
+       // int iuser = auth.getLoginUserPk();
+       // System.out.println("iuser : " + iuser);
         String target = "profile/" + iuser;
-        System.out.println(imgArr);
+    //    System.out.println(imgArr);
+
+        UserProfileEntity param = new UserProfileEntity();
+        param.setIuser(iuser);
         for(MultipartFile img : imgArr){
-            String saveFileNm = myFileUtils.transferTo(img, target);
+            String saveFileNm = myFileUtils.transferTo(img, target);//sdhflksjdksjd.jpg
+            //saveFileNm이 null이 아니라면 t_user_profile 테이블에
+            //insert를 해주세요
+            if(saveFileNm != null){
+                param.setImg(saveFileNm);
+
+                int result = userprofilemapper.insUserProfile(param);
+
+                if(loginUser.getMainProfile() == null && result == 1){
+                    UserEntity param2 = new UserEntity();
+                    param2.setIuser(iuser);//8
+                    param2.setMainProfile(saveFileNm); //sdhflksjdksjd.jpg
+
+                   if(mapper.updUser(param2) == 1){
+                       loginUser.setMainProfile(saveFileNm);
+                   }
+                }
+            }
         }
     }
 }

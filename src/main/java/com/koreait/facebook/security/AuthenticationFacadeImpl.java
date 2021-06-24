@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.io.PrintStream;
 import java.nio.file.attribute.UserPrincipal;
 
 @Component
@@ -21,6 +22,12 @@ public class AuthenticationFacadeImpl implements IAuthenticationFacade{
 
     @Override
     public int getLoginUserPk(){
+//        PrintStream ddd = System.out;
+//        ddd.println();
+//        System.out.println();
+
+//        UserEntity ue = getLoginUser();
+//        ue.getIuser();
         return getLoginUser().getIuser();
     }
 }

@@ -24,4 +24,23 @@
         AND authCd IS NULL
     </select>
 
+    <update id="updUser">
+        UPDATE t_user
+        <set>
+            <if test="mainProfile != null and mainProfile != ''">
+                mainProfile = #{mainProfile}
+            </if>
+            <if test="pw != null and pw != ''">
+                pw = #{pw}
+            </if>
+            <if test="nm != null and nm != ''">
+                nm = #{nm}
+            </if>
+            <if test="tel != null and tel != ''">
+                tel = #{tel}
+            </if>
+        </set>
+        WHERE iuser = #{iuser}
+    </update>
+
 </mapper>

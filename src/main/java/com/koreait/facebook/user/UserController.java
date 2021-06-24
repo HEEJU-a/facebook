@@ -51,4 +51,7 @@ public class UserController {
         service.profileImg(imgArr);
         return "redirect:profile";
     }
+
+
+
 }

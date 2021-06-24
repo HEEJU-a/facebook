@@ -16,8 +16,11 @@
 
       <ul class="menus" sec:authorize="isAuthenticated()">
           <li><a th:href="@{/user/profile}">
-                <span class="span__profile">
-                    <span th:with="auth=${#authentication.getPrincipal()}" th:text="${auth.nm}"></span>
+                <span class="span__profile" th:with="auth=${#authentication.getPrincipal().getUser()}">
+                    <th:block th:if="${auth.mainProfile != null }">
+                        <img th:src="@{/pic/profile/{iuser}/{img}(iuser=${auth.iuser}, img=${auth.mainProfile})}">
+                    </th:block>
+                    <span  th:text="${auth.nm}"></span>
                 </span>
               </a>
           </li>
