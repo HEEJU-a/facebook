@@ -13,7 +13,6 @@ public class UserDetailsImpl implements UserDetails {
     private UserEntity user;
 
     public UserDetailsImpl(UserEntity user){
-
         this.user = user;
     }
 
