@@ -1,0 +1,3 @@
+#selectedImgList { display: flex; flex-wrap: wrap; }
+
+#selectedImgList img { width: 200px; }

@@ -25,6 +25,20 @@
             <div>
                 <img class="profile w300 pointer"
                      th:src="@{/pic/profile/{iuser}/{img}(iuser=${auth.iuser}, img=${auth.mainProfile})}">
+                <table>
+                    <tr>
+                        <th>email</th>
+                        <td th:text="${auth.email}"></td>
+                    </tr>
+                    <tr>
+                        <th>tel</th>
+                        <td th:text="${auth.tel}"></td>
+                    </tr>
+                    <tr>
+                        <th>reg date</th>
+                        <td th:text="${auth.regdt}"></td>
+                    </tr>
+                </table>
             </div>
         </div>
 
@@ -38,7 +52,7 @@
                         <!-- Slides -->
                        <div class="swiper-slide" th:each="item : ${profileList}">
                            <div class="profile-img-parent" th:attr="data-iprofile=${item.iprofile}">
-                               <i th:unless="${item.img == auth.mainProfile}" class="no-main-profile pointer fas fa-home"></i>
+                               <i th:if="${item.img != auth.mainProfile}" class="no-main-profile pointer fas fa-home"></i>
                            </div>
                            <img th:src="@{/pic/profile/{iuser}/{img}(iuser=${auth.iuser}, img=${item.img})}">
                        </div>
