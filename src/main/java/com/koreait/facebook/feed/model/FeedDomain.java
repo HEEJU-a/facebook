@@ -9,4 +9,7 @@ import lombok.ToString;
 @ToString
 public class FeedDomain extends FeedEntity{
     private String writer;
+    private int ifeedimg;
+    private String img;
+    private String mainProfile;
 }

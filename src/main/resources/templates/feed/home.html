@@ -3,8 +3,18 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorator="basicLayout">
+    <th:block layout:fragment="css">
+        <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+        <link rel="stylesheet" th:href="@{/css/feed/home.css}">
+    </th:block>
+
+    <th:block layout:fragment="js">
+        <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+        <script defer th:src="@{/js/feed/home.js}"></script>
+    </th:block>
+
 
     <th:block layout:fragment="content">
-        <h1>Feed</h1>
+        <div id="feedContainer"></div>
     </th:block>
 </html>
