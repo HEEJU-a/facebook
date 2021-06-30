@@ -5,12 +5,13 @@
       layout:decorator="basicLayout"
 >
     <th:block layout:fragment="css">
-        <link rel="stylesheet" th:href="@{/css/user/profile.css}">
         <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+        <link rel="stylesheet" th:href="@{/css/user/profile.css}">
     </th:block>
 
     <th:block layout:fragment="js">
         <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+        <script defer th:src="@{/js/feed.js}"></script>
         <script defer th:src="@{/js/user/profile.js}"></script>
     </th:block>
 
@@ -30,6 +31,12 @@
                         <th>email</th>
                         <td th:text="${auth.email}"></td>
                     </tr>
+
+                    <tr>
+                        <th>name</th>
+                        <td th:text="${auth.nm}"></td>
+                    </tr>
+
                     <tr>
                         <th>tel</th>
                         <td th:text="${auth.tel}"></td>
@@ -41,6 +48,10 @@
                 </table>
             </div>
         </div>
+
+        <div id="feedContainer"></div>
+        <div class="loading hide"><img th:src="@{/img/loading.gif}"></div>
+
 
         <div class="modal hide">
             <div class="modal_close_parent"><i class="modal_close fas fa-times"></i></div>
@@ -72,7 +83,7 @@
 
         <script type="module">
 
-            const swiper = new Swiper('.swiper-container', {
+            const swiper = new Swiper('.modal .swiper-container', {
                 // Optional parameters
                 direction: 'horizontal',
                 loop: false,

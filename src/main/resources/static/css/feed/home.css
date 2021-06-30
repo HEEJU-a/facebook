@@ -3,9 +3,5 @@ section{
     justify-content: center;
 }
 
-section #feedContainer{
-    width: 620px;
-}
-#feedContainer .itemProfileCont img {width: 32px; border-radius: 50%;}
-#feedContainer .item .top{display: flex; }
-#feedContainer .item{ padding: 10px; border-radius: 5px; border: 1px solid #bdc3c7; margin-bottom: 50px;}
+
+

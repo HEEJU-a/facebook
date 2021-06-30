@@ -10,11 +10,15 @@
 
     <th:block layout:fragment="js">
         <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-        <script defer th:src="@{/js/feed/home.js}"></script>
+        <script defer th:src="@{/js/feed.js}"></script>
+        <script defer th:src="@{/js/feed/home2.js}"></script>
     </th:block>
 
 
     <th:block layout:fragment="content">
         <div id="feedContainer"></div>
+        <div class="loading hide">
+            <img th:src="@{/img/loading.gif}">
+        </div>
     </th:block>
 </html>

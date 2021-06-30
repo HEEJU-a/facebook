@@ -1,53 +1,77 @@
 const feedContainerElem = document.querySelector('#feedContainer');
 
-//피드리스트 가져오기
-function getFeedList(){
+//피드 리스트 가져오기
+function getFeedList() {
     fetch('list')
         .then(res => res.json())
         .then(myJson => {
-            //console.log(myJson);
+            console.log(myJson);
             makeFeedList(myJson);
         });
 }
 
-function makeFeedList(data){
-    if(data.length == 0){return;}
+function makeFeedList(data) {
+    if(data.length == 0) { return; }
     let beforeifeed = 0;
-    let imgDiv = null;
-    data.forEach(item=>{
-        if(beforeifeed !== item.ifeed){
+    let swiperWrapperDiv = null;
+    for(let i=0; i<data.length; i++) {
+        const item = data[i];
+
+        if(beforeifeed !== item.ifeed) {//예를 들어 3번ifeed에서 2번ifeed로 바뀌면 새로운 피드 시작이다! 라는걸 알수있음
             beforeifeed = item.ifeed;
 
-
-            const itemContainer = document.createElement('div');//사진 담고 있는 제일 큰 div
+            const itemContainer = document.createElement('div');
             itemContainer.classList.add('item');
 
-            const topDiv = document.createElement('div'); // 큰 div의 가장 위에 있는 div
-            topDiv.classList.add('top');
+            const topDiv = document.createElement('div');
+            topDiv.classList.add('top')
             topDiv.innerHTML = `
             <div class="itemProfileCont">
                 <img src="/pic/profile/${item.iuser}/${item.mainProfile}">
             </div>
             <div>
                 <div>${item.writer}</div>
-                <div>${item.location == null ? '' : item.location}</div>           
+                <div>${item.location == null ? '' : item.location}</div>
             </div>
-        `;
-            //이미지 넣기 for문 돌면서 계속 추가 될수있어야함
-            imgDiv = document.createElement('div');
+            `;
+            const imgDiv = document.createElement('div');
+            imgDiv.classList.add('itemImg');
+
+            const swiperContainerDiv = document.createElement('div');
+            swiperContainerDiv.classList.add('swiper-container');
+
+            swiperWrapperDiv = document.createElement('div');
+            swiperWrapperDiv.classList.add('swiper-wrapper');
+
+            swiperContainerDiv.append(swiperWrapperDiv);
+            imgDiv.append(swiperContainerDiv);
 
             itemContainer.append(topDiv);
             itemContainer.append(imgDiv);
+            if(item.ctnt != null) {
+                const ctntDiv = document.createElement('div');
+                ctntDiv.innerText = item.ctnt;
+                ctntDiv.classList.add('itemCtnt');
+                itemContainer.append(ctntDiv);
+            }
             feedContainerElem.append(itemContainer);
         }
 
-        //DB에서 img 부터는 if문 끝난뒤에
-        if(item.img != null){
+        if(item.img != null) {
+            const swiperSlideDiv = document.createElement('div')
+            swiperSlideDiv.classList.add('swiper-slide');
+
             const img = document.createElement('img');
-            img.src= `/pic/feed/${item.ifeed}/${item.img}`;
-            imgDiv.append(img);
+            img.src = `/pic/feed/${item.ifeed}/${item.img}`;
+            swiperSlideDiv.append(img);
+            swiperWrapperDiv.append(swiperSlideDiv);
         }
+    }
+
+    const swiper = new Swiper('.swiper-container', {
+        direction: 'horizontal',
+        loop: false,
     });
-    // 여기서는 반복문 돌리면서 피드를 뿌릴것임
 }
+
 getFeedList();

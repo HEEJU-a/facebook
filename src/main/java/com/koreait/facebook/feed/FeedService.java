@@ -1,9 +1,7 @@
 package com.koreait.facebook.feed;
 
 import com.koreait.facebook.common.MyFileUtils;
-import com.koreait.facebook.feed.model.FeedDomain;
-import com.koreait.facebook.feed.model.FeedEntity;
-import com.koreait.facebook.feed.model.FeedImgEntity;
+import com.koreait.facebook.feed.model.*;
 import com.koreait.facebook.security.IAuthenticationFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,6 +49,11 @@ public class FeedService {
         return result;
     }
     public List<FeedDomain> selFeedList(){
+       // List<FeedDomain2> list = mapper.selFeedList2();
         return mapper.selFeedList();
+    }
+
+    public List<FeedDomain2> selFeedList2(FeedDTO param){
+        return mapper.selFeedList2(param);
     }
 }

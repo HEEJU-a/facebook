@@ -92,3 +92,10 @@ modalCloseElem.addEventListener('click', () => {
     modalElem.classList.add('hide');
     //location.reload();
 });
+
+
+feedObj.containerElem = document.querySelector('#feedContainer');
+feedObj.loadingElem = document.querySelector('.loading');
+feedObj.url = '/user/feedList';
+feedObj.setScrollInfinity(window);
+feedObj.getFeedList(1);

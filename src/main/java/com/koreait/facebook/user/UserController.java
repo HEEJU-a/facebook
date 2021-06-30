@@ -1,6 +1,8 @@
 package com.koreait.facebook.user;
 
 import com.koreait.facebook.common.MyConst;
+import com.koreait.facebook.feed.model.FeedDTO;
+import com.koreait.facebook.feed.model.FeedDomain2;
 import com.koreait.facebook.security.UserDetailsImpl;
 import com.koreait.facebook.user.model.UserEntity;
 import com.koreait.facebook.user.model.UserProfileEntity;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -70,6 +73,13 @@ public class UserController {
     @GetMapping("/mainProfile")
     public Map<String, Object>  mainProfile(UserProfileEntity param){
         return service.updUserMainProfile(param);
+    }
+
+    @ResponseBody
+    @GetMapping("/feedList")
+    public List<FeedDomain2> selFeedList2(FeedDTO param){
+
+        return service.selFeedList2(param);
     }
 
 }

@@ -3,6 +3,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.koreait.facebook.feed.FeedMapper">
+    <resultMap id="FeedDomainMap" type="FeedDomain2">
+        <result property="ifeed" column="ifeed"></result>
+        <collection property="imgList" column="ifeed" javaType="ArrayList"
+                    ofType="FeedImgEntity" select="selFeedImgList"></collection>
+    </resultMap>
+
     <insert id="insFeed" useGeneratedKeys="true" keyProperty="ifeed">
         INSERT INTO t_feed
         (location, ctnt, iuser)
@@ -25,8 +31,26 @@
         ON A.ifeed = B.ifeed
         INNER JOIN t_user C
         ON A.iuser = C.iuser
-        ORDER BY A.ifeed DESC;
+        ORDER BY A.ifeed DESC
+    </select>
 
+    <select id="selFeedList2" resultMap="FeedDomainMap">
+        SELECT
+            A.ifeed, A.location, A.ctnt, A.iuser, A.regdt
+             ,C.nm AS writer, C.mainProfile
+        FROM t_feed A
+        INNER JOIN t_user C
+        ON A.iuser = C.iuser
+        <if test="iuser > 0">
+            AND C.iuser = ${iuser}
+        </if>
+        ORDER BY A.ifeed DESC
+        LIMIT #{startIdx}, #{limit}
+    </select>
+
+    <select id="selFeedImgList" resultType="FeedImgEntity">
+        SELECT ifeedimg, ifeed, img FROM t_feed_img
+        WHERE ifeed = #{ifeed}
     </select>
 
 </mapper>

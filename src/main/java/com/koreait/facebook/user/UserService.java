@@ -4,6 +4,9 @@ import com.koreait.facebook.common.EmailService;
 import com.koreait.facebook.common.EmailServiceImpl;
 import com.koreait.facebook.common.MyFileUtils;
 import com.koreait.facebook.common.MySecurityUtils;
+import com.koreait.facebook.feed.FeedMapper;
+import com.koreait.facebook.feed.model.FeedDTO;
+import com.koreait.facebook.feed.model.FeedDomain2;
 import com.koreait.facebook.security.IAuthenticationFacade;
 import com.koreait.facebook.user.model.UserEntity;
 //mport org.mindrot.jbcrypt.BCrypt;
@@ -42,6 +45,9 @@ public class UserService {
     @Autowired
     private UserProfileMapper userprofilemapper;
 
+    @Autowired
+    private FeedMapper feedMapper;
+
     public int join(UserEntity param){
 
         String authCd = secUtils.getRandomDigit(5);
@@ -60,6 +66,7 @@ public class UserService {
         }
         return result;
     }
+
 
     //이메일 인증처리
     public int auth(UserEntity param){
@@ -128,4 +135,9 @@ public class UserService {
         res.put("img", param.getImg());
         return res;
     }
+    public List<FeedDomain2> selFeedList2(FeedDTO param){
+        param.setIuser(auth.getLoginUserPk());
+        return feedMapper.selFeedList2(param);
+    }
+
 }
