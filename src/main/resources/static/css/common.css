@@ -87,3 +87,7 @@ section #feedContainer{
 #feedContainer .item .itemCtnt{margin-top: 30px; margin-bottom: 20px; padding: 10px;}
 #feedContainer .item .itemImg img{width: 598px;}
 #feedContainer .item .itemImg { margin-top: 20px; }
+
+#feedContainer .item .favCont{display: flex; padding: 10px;}
+#feedContainer .item .favCont i{color: crimson; font-size: 22px;}
+#feedContainer .item .favCont span{margin-left: 12px;}

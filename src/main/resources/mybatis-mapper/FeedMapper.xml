@@ -38,11 +38,26 @@
         SELECT
             A.ifeed, A.location, A.ctnt, A.iuser, A.regdt
              ,C.nm AS writer, C.mainProfile
+             , IFNULL(E.cnt, 0) as favCnt
+        <if test="iuserForFav > 0">
+            , CASE WHEN D.ifeed IS NULL THEN 0 ELSE 1 END isFav
+        </if>
         FROM t_feed A
         INNER JOIN t_user C
         ON A.iuser = C.iuser
-        <if test="iuser > 0">
-            AND C.iuser = ${iuser}
+        <if test="iuserForMyFeed > 0">
+            AND C.iuser = ${iuserForMyFeed}
+        </if>
+        LEFT JOIN(
+            SELECT ifeed, COUNT(ifeed) AS cnt
+            FROM t_feed_fav
+            GROUP BY ifeed
+                ) E
+            on A.ifeed = E.ifeed
+        <if test="iuserForFav > 0">
+            LEFT JOIN t_feed_fav D
+            ON  D.iuser = ${iuserForFav}
+            AND A.ifeed = D.ifeed
         </if>
         ORDER BY A.ifeed DESC
         LIMIT #{startIdx}, #{limit}
@@ -52,5 +67,19 @@
         SELECT ifeedimg, ifeed, img FROM t_feed_img
         WHERE ifeed = #{ifeed}
     </select>
+
+
+    <!-- //////////////////////////fav///////////////////-->
+    <insert id="insFeedFav">
+        INSERT INTO t_feed_fav
+        (ifeed, iuser)
+        VALUES
+        (#{ifeed}, #{iuser})
+    </insert>
+    <delete id="delFeedFav">
+        DELETE FROM t_feed_fav
+        WHERE ifeed = #{ifeed}
+        AND iuser = #{iuser}
+    </delete>
 
 </mapper>

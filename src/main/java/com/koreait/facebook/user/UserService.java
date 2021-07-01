@@ -136,7 +136,7 @@ public class UserService {
         return res;
     }
     public List<FeedDomain2> selFeedList2(FeedDTO param){
-        param.setIuser(auth.getLoginUserPk());
+        param.setIuserForMyFeed(auth.getLoginUserPk());
         return feedMapper.selFeedList2(param);
     }
 
