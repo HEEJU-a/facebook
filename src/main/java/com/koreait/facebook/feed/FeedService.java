@@ -65,4 +65,16 @@ public class FeedService {
         }
         return mapper.delFeedFav(param);
     }
+
+    /*******************cmt[start]**********/
+    public int insFeedCmt(FeedCmtEntity param){
+        param.setIuser(auth.getLoginUserPk());
+        return mapper.insFeedCmt(param);
+    }
+
+    public List<FeedCmtDomain> selFeedCmtList(FeedCmtEntity param){
+        return mapper.selFeedCmtList(param);
+    }
+
+    /*******************cmt[end]**********/
 }

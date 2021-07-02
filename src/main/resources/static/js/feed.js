@@ -37,7 +37,7 @@ const feedObj = {
             const itemContainer = document.createElement('div');
             itemContainer.classList.add('item');
 
-            //글쓴이 정보영역
+            // 글쓴이 정보 영역
             const regDtInfo = getDateTimeInfo(item.regdt);
             const topDiv = document.createElement('div');
             topDiv.classList.add('top')
@@ -50,7 +50,7 @@ const feedObj = {
                 <div>${item.location == null ? '' : item.location}</div>
             </div>
         `;
-            //이미지 영역
+            //이미지영역
             const imgDiv = document.createElement('div');
             imgDiv.classList.add('itemImg');
 
@@ -82,58 +82,126 @@ const feedObj = {
             const favDiv = document.createElement('div');
             favDiv.classList.add('favCont');
             const heartIcon = document.createElement('i');
-            // heartIcon.classList.add('fa-heart');
-            // heartIcon.classList.add('pointer');
-
             heartIcon.className = 'fa-heart pointer';
-
-            if(item.isFav === 1){//좋아요 O
+            if(item.isFav === 1) { //좋아요 O
                 heartIcon.classList.add('fas');
-            }else{// 좋아요 X
+            } else { //좋아요 X
                 heartIcon.classList.add('far');
             }
-
             const heartCntSpan = document.createElement('span');
             heartCntSpan.innerText = item.favCnt;
 
-            heartIcon.addEventListener('click', ()=>{
-                //console.log('ifeed : ' + item.ifeed);
-                const type = heartIcon.classList.contains('fas') ? 0 : 1;
-                // ->앞으로 변경되어야 될 값
-                const favCnt = parseInt(heartCntSpan.innerText);
-                fetch(`fav?ifeed=${item.ifeed}&type=${type}`)
+            heartIcon.addEventListener('click', ()=> {
+                item.isFav = 1 - item.isFav;
+                fetch(`fav?ifeed=${item.ifeed}&type=${item.isFav}`)
                     .then(res => res.json())
                     .then(myJson => {
-                        if(myJson === 1){
-                            switch(type){
-                                case 0: // O > X
+                        if(myJson === 1) {
+                            switch (item.isFav) {
+                                case 0: //O > X
                                     heartIcon.classList.remove('fas');
                                     heartIcon.classList.add('far');
-                                    heartCntSpan.innerText = favCnt - 1;
-
+                                    heartCntSpan.innerText--;
                                     break;
                                 case 1: //X > O
                                     heartIcon.classList.remove('far');
                                     heartIcon.classList.add('fas');
-                                    heartCntSpan.innerText = favCnt + 1;
+                                    heartCntSpan.innerText++;
                                     break;
                             }
                         }
                     });
             });
             favDiv.append(heartIcon);
-
-
-
             favDiv.append(heartCntSpan);
-            itemContainer.append(favDiv);
 
-            if(item.ctnt != null) {// 글내용 영역
+            itemContainer.append(favDiv);
+            if(item.ctnt != null) { // 글내용 영역
                 const ctntDiv = document.createElement('div');
                 ctntDiv.innerText = item.ctnt;
                 ctntDiv.classList.add('itemCtnt');
                 itemContainer.append(ctntDiv);
             }
+
+            //댓글 영역
+            const cmtDiv = document.createElement('div');
+            const cmtListDiv = document.createElement('div');
+            const cmtFormDiv = document.createElement('div');
+            cmtDiv.append(cmtListDiv);
+            if(item.cmt != null && item.cmt.isMore === 1) {
+                const moreCmtDiv = document.createElement('div');
+                const moreCmtSpan = document.createElement('span');
+                moreCmtSpan.className = 'pointer';
+                moreCmtSpan.innerText = '댓글 더보기';
+                moreCmtSpan.addEventListener('click', () => {
+                    moreCmtSpan.remove();
+                    fetch(`cmt?ifeed=${item.ifeed}`)
+                        .then(res => res.json())
+                        .then(result => {
+                            result.forEach(obj => {
+                                const cmtItemContainerDiv = this.makeCmtItem(obj);
+                                cmtListDiv.append(cmtItemContainerDiv);
+                            })
+                        });
+                });
+                moreCmtDiv.append(moreCmtSpan);
+                cmtDiv.append(moreCmtDiv);
+            }
+            cmtDiv.append(cmtFormDiv);
+
+            const cmtInput = document.createElement('input');
+            cmtInput.type = 'text';
+            cmtInput.placeholder = '댓글을 입력하세요...';
+
+            if(item.cmt != null) { //댓글 있음
+                const cmtItemContainerDiv = this.makeCmtItem(item.cmt);
+                cmtListDiv.append(cmtItemContainerDiv);
+            }
+
+            const cmtBtn = document.createElement('input');
+            cmtBtn.type = 'button';
+            cmtBtn.value = '등록';
+            cmtBtn.addEventListener('click', () => {
+                const cmt = cmtInput.value;
+                if(cmt.length === 0) {
+                    alert('댓글 내용을 작성해 주세요.');
+                    return;
+                }
+
+                const param = {
+                    ifeed: item.ifeed,
+                    cmt: cmt
+                }
+
+                fetch('cmt', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(param)
+                })
+                    .then(res => res.json())
+                    .then(myJson => {
+                        console.log(myJson);
+                        switch(myJson) {
+                            case 0:
+                                alert('댓글을 등록할 수 없습니다.');
+                                break;
+                            case 1:
+                                cmtInput.value = '';
+                                break;
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            });
+
+            cmtFormDiv.append(cmtInput);
+            cmtFormDiv.append(cmtBtn);
+
+            itemContainer.append(cmtDiv);
             this.containerElem.append(itemContainer);
         }
         if(this.swiper != null) { this.swiper = null; }
@@ -170,6 +238,28 @@ const feedObj = {
         }).then(() => {
             this.hideLoading();
         });
+    },
+    makeCmtItem: function({iuser, writerProfile, writer, cmt}) {
+        const cmtItemContainerDiv = document.createElement('div');
+        cmtItemContainerDiv.className = 'cmtItemCont';
+
+        //프로필
+        const cmtItemProfileDiv = document.createElement('div');
+        cmtItemProfileDiv.className = 'cmtItemProfile';
+        const cmtItemWriterProfileImg = document.createElement('img');
+        cmtItemWriterProfileImg.src = `/pic/profile/${iuser}/${writerProfile}`;
+        cmtItemWriterProfileImg.className = 'profile w30';
+
+        cmtItemProfileDiv.append(cmtItemWriterProfileImg);
+        cmtItemContainerDiv.append(cmtItemProfileDiv);
+
+        //댓글
+        const cmtItemCtntDiv = document.createElement('div');
+        cmtItemCtntDiv.className = 'cmtItemCtnt';
+        cmtItemCtntDiv.innerHTML = `<div>${writer}</div><div>${cmt}</div>`;
+        cmtItemContainerDiv.append(cmtItemCtntDiv);
+
+        return cmtItemContainerDiv;
     },
     hideLoading: function() { this.loadingElem.classList.add('hide');},
     showLoading: function() { this.loadingElem.classList.remove('hide'); }
