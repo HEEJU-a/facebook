@@ -6,4 +6,5 @@ import org.springframework.stereotype.Component;
 public class MyConst {
     public final String PROFILE_LIST = "profileList";
     public final String RESULT = "result";
+    public final String PROFILE = "profile";
 }

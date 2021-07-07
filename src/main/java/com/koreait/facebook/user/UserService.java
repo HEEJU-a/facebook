@@ -1,7 +1,6 @@
 package com.koreait.facebook.user;
 
 import com.koreait.facebook.common.EmailService;
-import com.koreait.facebook.common.EmailServiceImpl;
 import com.koreait.facebook.common.MyFileUtils;
 import com.koreait.facebook.common.MySecurityUtils;
 import com.koreait.facebook.feed.FeedMapper;
@@ -10,9 +9,8 @@ import com.koreait.facebook.feed.model.FeedDomain2;
 import com.koreait.facebook.security.IAuthenticationFacade;
 import com.koreait.facebook.user.model.UserEntity;
 //mport org.mindrot.jbcrypt.BCrypt;
+import com.koreait.facebook.user.model.UserDomain;
 import com.koreait.facebook.user.model.UserProfileEntity;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -117,6 +115,10 @@ public class UserService {
             }
         }
     }
+    public UserDomain selUserProfile(UserEntity param){
+        return userprofilemapper.selUserProfile(param);
+    }
+
     public List<UserProfileEntity> selUserProfileList(UserEntity param){
         return userprofilemapper.selUserProfileList(param);
     }
@@ -136,7 +138,7 @@ public class UserService {
         return res;
     }
     public List<FeedDomain2> selFeedList2(FeedDTO param){
-        param.setIuserForMyFeed(auth.getLoginUserPk());
+
         return feedMapper.selFeedList2(param);
     }
 

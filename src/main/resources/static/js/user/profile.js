@@ -93,9 +93,11 @@ modalCloseElem.addEventListener('click', () => {
     //location.reload();
 });
 
+const localConstElem = document.querySelector('#localConst');
 
 feedObj.containerElem = document.querySelector('#feedContainer');
 feedObj.loadingElem = document.querySelector('.loading');
 feedObj.url = '/user/feedList';
 feedObj.setScrollInfinity(window);
 feedObj.getFeedList(1);
+feedObj.iuser = localConstElem.dataset.iuser;

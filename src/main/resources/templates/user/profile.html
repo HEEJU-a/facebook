@@ -16,34 +16,34 @@
     </th:block>
 
     <th:block layout:fragment="content"  th:with="auth=${#authentication.getPrincipal().getUser()}">
-        <div th:attr="data-main-profile=${auth.mainProfile}"></div>
-        <form th:action="@{profileImg}" method="post" enctype="multipart/form-data">
+        <div id="localConst" th:attr="data-iuser=${profile.iuser}"></div>
+        <form th:if="${auth.iuser eq profile.iuser}" th:action="@{profileImg}" method="post" enctype="multipart/form-data">
             <div>이미지 : <input type="file" name="imgArr" multiple accept="image/*"></div>
             <input type="submit" value="업로드">
         </form>
 
-        <div id="flexContainer" th:if="${auth.mainProfile != null}">
+        <div id="flexContainer" th:if="${profile.mainProfile != null}">
             <div>
                 <img class="profile w300 pointer"
-                     th:src="@{/pic/profile/{iuser}/{img}(iuser=${auth.iuser}, img=${auth.mainProfile})}">
+                     th:src="@{/pic/profile/{iuser}/{img}(iuser=${profile.iuser}, img=${profile.mainProfile})}">
                 <table>
                     <tr>
                         <th>email</th>
-                        <td th:text="${auth.email}"></td>
+                        <td th:text="${profile.email}"></td>
                     </tr>
 
                     <tr>
                         <th>name</th>
-                        <td th:text="${auth.nm}"></td>
+                        <td th:text="${profile.nm}"></td>
                     </tr>
 
                     <tr>
                         <th>tel</th>
-                        <td th:text="${auth.tel}"></td>
+                        <td th:text="${profile.tel}"></td>
                     </tr>
                     <tr>
                         <th>reg date</th>
-                        <td th:text="${auth.regdt}"></td>
+                        <td th:text="${profile.regdt}"></td>
                     </tr>
                 </table>
             </div>
@@ -62,10 +62,10 @@
                     <div class="swiper-wrapper">
                         <!-- Slides -->
                        <div class="swiper-slide" th:each="item : ${profileList}">
-                           <div class="profile-img-parent" th:attr="data-iprofile=${item.iprofile}">
+                           <div class="profile-img-parent" th:if="${auth.iuser eq profile.iuser}" th:attr="data-iprofile=${item.iprofile}">
                                <i th:if="${item.img != auth.mainProfile}" class="no-main-profile pointer fas fa-home"></i>
                            </div>
-                           <img th:src="@{/pic/profile/{iuser}/{img}(iuser=${auth.iuser}, img=${item.img})}">
+                           <img th:src="@{/pic/profile/{iuser}/{img}(iuser=${profile.iuser}, img=${item.img})}">
                        </div>
                     </div>
                     <!-- If we need pagination -->

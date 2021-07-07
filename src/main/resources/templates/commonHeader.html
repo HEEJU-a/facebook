@@ -4,6 +4,8 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <header th:fragment="header">
+    <span id="globalConst" sec:authorize="isAuthenticated()"  th:with="auth=${#authentication.getPrincipal().getUser()}"
+          th:attr="data-iuser=${auth.iuser}, data-writer=${auth.nm}, data-writer-profile=${auth.mainProfile}"></span>
   <nav>
     <div class="header__left">
         <a th:href="@{/feed/home}">
@@ -16,9 +18,9 @@
         <li><a th:href="@{/user/login}"> 로그인</a></li>
       </ul>
 
-      <ul class="menus" sec:authorize="isAuthenticated()">
+      <ul class="menus" sec:authorize="isAuthenticated()"  th:with="auth=${#authentication.getPrincipal().getUser()}">
           <li><a th:href="@{/user/profile}">
-                <span class="span__profile" th:with="auth=${#authentication.getPrincipal().getUser()}">
+                <span class="span__profile" >
                     <th:block th:if="${auth.mainProfile != null }">
                         <img class="profile w50" th:src="@{/pic/profile/{iuser}/{img}(iuser=${auth.iuser}, img=${auth.mainProfile})}">
                     </th:block>
