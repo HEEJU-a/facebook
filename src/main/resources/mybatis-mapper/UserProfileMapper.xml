@@ -13,11 +13,13 @@
     <select id="selUserProfile" resultType="UserDomain">
         select
             A.iuser, A.email, A.nm, A.tel, A.mainProfile, A.regdt
-            , (SELECT COUNT(ifeed) FROM t_feed WHERE iuser = ${iuser}) AS cntFeed
-            , (SELECT COUNT(iuserMe) FROM t_user_follow WHERE iuserMe = ${iuser}) AS cntFollow
-            , (SELECT COUNT(iuserYou) FROM t_user_follow WHERE iuserYou = ${iuser}) AS cntFollower
+            , (SELECT COUNT(ifeed) FROM t_feed WHERE iuser = ${youIuser}) AS cntFeed
+            , (SELECT COUNT(iuserMe) FROM t_user_follow WHERE iuserMe = ${youIuser}) AS cntFollow
+            , (SELECT COUNT(iuserYou) FROM t_user_follow WHERE iuserYou = ${youIuser}) AS cntFollower
+            , (SELECT COUNT(iuserMe) FROM t_user_follow WHERE iuserMe = ${youIuser} AND iuserYou = ${meIuser}) AS isYouFollowMe
+            , (SELECT COUNT(iuserMe) FROM t_user_follow WHERE iuserMe = ${meIuser} AND iuserYou = ${youIuser}) AS isMeFollowYou
         From t_user A
-        WHERE A.iuser = ${iuser}
+        WHERE A.iuser = ${youIuser}
     </select>
 
     <select id="selUserProfileList" resultType="UserProfileEntity">
