@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+
 @Component
 public class EmailServiceImpl implements EmailService {
 
