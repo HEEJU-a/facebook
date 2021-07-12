@@ -1,143 +1,150 @@
 <!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="basicLayout"
->
-    <th:block layout:fragment="css">
-        <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
-        <link rel="stylesheet" th:href="@{/css/user/profile.css}">
-    </th:block>
+      layout:decorator="basicLayout">
+<head><title>프로필</title></head>
 
-    <th:block layout:fragment="js">
-        <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-        <script defer th:src="@{/js/feed.js}"></script>
-        <script defer th:src="@{/js/user/profile.js}"></script>
-    </th:block>
+<th:block layout:fragment="css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <link rel="stylesheet" th:href="@{/css/user/profile.css}">
+</th:block>
 
-    <th:block layout:fragment="content"  th:with="auth=${#authentication.getPrincipal().getUser()}">
-        <div id="localConst" th:attr="data-iuser=${profile.iuser}"></div>
-        <form th:if="${auth.iuser eq profile.iuser}" th:action="@{profileImg}" method="post" enctype="multipart/form-data">
-            <div>이미지 : <input type="file" name="imgArr" multiple accept="image/*"></div>
+<th:block layout:fragment="js">
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script defer th:src="@{/js/feed.js}"></script>
+    <script defer th:src="@{/js/user/profile.js}"></script>
+</th:block>
+
+<th:block layout:fragment="content" th:with="auth=${#authentication.getPrincipal().getUser()}">
+    <div id="localConst" th:attr="data-iuser=${profile.iuser}"></div>
+    <form th:if="${auth.iuser eq profile.iuser}" th:action="@{profileImg}" method="post" enctype="multipart/form-data">
+        <div>
+            이미지 : <input type="file" name="imgArr" multiple accept="image/*">
             <input type="submit" value="업로드">
-        </form>
-
-        <div id="flexContainer" >
-            <div>
-                <table>
-                    <tr>
-                        <td>게시물</td>
-                        <td th:text="${profile.cntFeed}"></td>
-                        <td>팔로워</td>
-                        <td th:text="${profile.cntFollower}"></td>
-                        <td>팔로우</td>
-                        <td th:text="${profile.cntFollow}"></td>
-                        <td th:unless="${auth.iuser eq profile.iuser}">
-                            <th:block th:if="${profile.isMeFollowYou eq 1}">
-                                <input type="button" value="팔로우 취소">
-                            </th:block>
-
-                            <th:block th:unless="${profile.isMeFollowYou eq 1}">
-                                <th:block th:if="${profile.isYouFollowMe eq 1}">
-                                    <input type="button" value="맞팔로우">
-                                </th:block>
-
-                                <th:block th:unless="${profile.isYouFollowMe eq 1}">
-                                    <input type="button" value="팔로우">
-                                </th:block>
-                            </th:block>
-<!--                           <span th:text="${profile.isYouFollowMe}"></span>-->
-<!--                            /-->
-<!--                            <span th:text="${profile.isMeFollowYou}"></span>-->
-                        </td>
-                    </tr>
-                </table>
-                <img class="profile w300 pointer" th:if="${profile.mainProfile != null}"
-                     th:src="@{/pic/profile/{iuser}/{img}(iuser=${profile.iuser}, img=${profile.mainProfile})}">
-                <table>
-                    <tr>
-                        <th>email</th>
-                        <td th:text="${profile.email}"></td>
-                    </tr>
-
-                    <tr>
-                        <th>name</th>
-                        <td th:text="${profile.nm}"></td>
-                    </tr>
-
-                    <tr>
-                        <th>tel</th>
-                        <td th:text="${profile.tel}"></td>
-                    </tr>
-                    <tr>
-                        <th>reg date</th>
-                        <td th:text="${profile.regdt}"></td>
-                    </tr>
-                </table>
-            </div>
         </div>
+    </form>
 
-        <div id="feedContainer"></div>
-        <div class="loading hide"><img th:src="@{/img/loading.gif}"></div>
+    <div id="flexContainer">
+        <div>
+            <table>
+                <tr>
+                    <td>게시물</td>
+                    <td th:text="${profile.cntFeed}"></td>
+                    <td class="pointer follower">팔로워</td>
+                    <td class="pointer follower" th:text="${profile.cntFollower}"></td>
+                    <td class="pointer follow">팔로우</td>
+                    <td class="pointer follow" th:text="${profile.cntFollow}"></td>
+                    <td th:unless="${auth.iuser eq profile.iuser}">
+                        <th:block th:if="${profile.isMeFollowYou eq 1}">
+                            <input type="button" class="instaBtn instaBtnEnable" id="btnFollow" data-follow="1" value="팔로우 취소">
+                        </th:block>
+                        <th:block th:unless="${profile.isMeFollowYou eq 1}">
+                            <th:block th:if="${profile.isYouFollowMe eq 1}">
+                                <input type="button" class="instaBtn" id="btnFollow" data-follow="0" value="맞팔로우">
+                            </th:block>
+                            <th:block th:unless="${profile.isYouFollowMe eq 1}">
+                                <input type="button" class="instaBtn" id="btnFollow" data-follow="0" value="팔로우">
+                            </th:block>
+                        </th:block>
+                    </td>
+                </tr>
+            </table>
+            <img class="pointer profile wh300" id="profileImg"
+                 th:src="@{/pic/profile/{iuser}/{img}(iuser=${profile.iuser}, img=${profile.mainProfile})}"
+                 onerror="this.style.display='none';">
+            <table>
+                <tr>
+                    <th>email</th>
+                    <td th:text="${profile.email}"></td>
+                </tr>
+                <tr>
+                    <th>name</th>
+                    <td th:text="${profile.nm}"></td>
+                </tr>
+                <tr>
+                    <th>tel</th>
+                    <td th:text="${profile.tel}"></td>
+                </tr>
+                <tr>
+                    <th>reg date</th>
+                    <td th:text="${profile.regdt}"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
 
+    <div id="feedContainer"></div>
+    <div class="loading hide"><img th:src="@{/img/loading.gif}"></div>
 
-        <div class="modal hide">
-            <div class="modal_close_parent"><i class="modal_close fas fa-times"></i></div>
-            <div style="background-color: white;">
-                <!-- Slider main container -->
-                <div class="swiper-container">
-                    <!-- Additional required wrapper -->
-                    <div class="swiper-wrapper">
-                        <!-- Slides -->
-                       <div class="swiper-slide" th:each="item : ${profileList}">
-                           <div class="profile-img-parent" th:if="${auth.iuser eq profile.iuser}" th:attr="data-iprofile=${item.iprofile}">
-                               <i th:if="${item.img != auth.mainProfile}" class="no-main-profile pointer fas fa-home"></i>
-                           </div>
-                           <img th:src="@{/pic/profile/{iuser}/{img}(iuser=${profile.iuser}, img=${item.img})}">
-                       </div>
-                    </div>
-                    <!-- If we need pagination -->
-                    <div class="swiper-pagination"></div>
-
-                    <!-- If we need navigation buttons -->
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
-
-                    <!-- If we need scrollbar -->
-                    <div class="swiper-scrollbar"></div>
+    <div class="modal-follow hide">
+        <div>
+            <div class="container">
+                <div class="top">
+                    <div id="title">팔로우</div>
+                    <i id="modal-follow-close" class="modal_close fas fa-times"></i>
                 </div>
+                <div class="followCont"></div>
             </div>
         </div>
+    </div>
 
-        <script type="module">
+    <div class="modal hide">
+        <div class="modal_close_parent"><i class="modal_close fas fa-times"></i></div>
+        <div style="background-color: white;">
+            <!-- Slider main container -->
+            <div class="swiper-container">
+                <!-- Additional required wrapper -->
+                <div class="swiper-wrapper">
+                    <!-- Slides -->
+                    <div class="swiper-slide" th:each="item : ${profileList}">
+                        <div>
+                            <div class="profile-img-parent" th:if="${auth.iuser eq profile.iuser}" th:attr="data-iprofile=${item.iprofile}">
+                                <i th:if="${item.img != auth.mainProfile}" class="no-main-profile pointer fas fa-bell"></i>
+                            </div>
+                            <img th:src="@{/pic/profile/{iuser}/{img}(iuser=${profile.iuser}, img=${item.img})}">
+                        </div>
+                    </div>
 
-            const swiper = new Swiper('.modal .swiper-container', {
-                // Optional parameters
-                direction: 'horizontal',
-                loop: false,
+                </div>
+                <!-- If we need pagination -->
+                <div class="swiper-pagination"></div>
 
-                // If we need pagination
-                pagination: {
-                    el: '.swiper-pagination',
-                },
+                <!-- If we need navigation buttons -->
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
 
-                // Navigation arrows
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                },
+                <!-- If we need scrollbar -->
+                <div class="swiper-scrollbar"></div>
+            </div>
+        </div>
+    </div>
 
-                // And if we need scrollbar
-                scrollbar: {
-                    el: '.swiper-scrollbar',
-                },
-                effect: 'fade',
-                fadeEffect: {
-                    crossFade: true
-                },
-            });
-        </script>
-    </th:block>
+    <script type="module">
+        const swiper = new Swiper('.modal .swiper-container', {
+            // Optional parameters
+            direction: 'horizontal',
+            loop: false,
 
+            // If we need pagination
+            pagination: {
+                el: '.swiper-pagination',
+            },
 
+            // Navigation arrows
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+
+            // And if we need scrollbar
+            scrollbar: {
+                el: '.swiper-scrollbar',
+            },
+            effect: 'fade',
+            fadeEffect: {
+                crossFade: true
+            },
+        });
+    </script>
+</th:block>
 </html>

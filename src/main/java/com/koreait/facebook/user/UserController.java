@@ -4,9 +4,7 @@ import com.koreait.facebook.common.MyConst;
 import com.koreait.facebook.feed.model.FeedDTO;
 import com.koreait.facebook.feed.model.FeedDomain2;
 import com.koreait.facebook.security.UserDetailsImpl;
-import com.koreait.facebook.user.model.UserDTO;
-import com.koreait.facebook.user.model.UserEntity;
-import com.koreait.facebook.user.model.UserProfileEntity;
+import com.koreait.facebook.user.model.*;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -67,6 +65,7 @@ public class UserController {
         param2.setYouIuser(param.getIuser());
         if(param2.getYouIuser() == 0){
             param2.setYouIuser(userDetails.getUser().getIuser());
+            param.setIuser(userDetails.getUser().getIuser());
         }
         model.addAttribute(myConst.PROFILE, service.selUserProfile(param2));
         model.addAttribute(myConst.PROFILE_LIST, service.selUserProfileList(param));
@@ -88,6 +87,26 @@ public class UserController {
     public List<FeedDomain2> selFeedList2(FeedDTO param){
 
         return service.selFeedList2(param);
+    }
+
+    @ResponseBody
+    @PostMapping("/follow")
+    public  Map<String, Object> doFollow(@RequestBody UserFollowEntity param){
+        System.out.println(param);
+        return service.insUserFollow(param);
+    }
+
+    @ResponseBody
+    @DeleteMapping("/follow")
+    public  Map<String, Object> cancelFollow(UserFollowEntity param){
+        System.out.println(param);
+        return service.delUserFollow(param);
+    }
+
+    @ResponseBody
+    @GetMapping("/getFollowList")
+    public List<UserDomain> getFollowList(UserFollowEntity param){
+        return service.selUserFollowList(param);
     }
 
 }

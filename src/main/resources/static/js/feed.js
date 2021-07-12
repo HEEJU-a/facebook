@@ -1,4 +1,4 @@
-function getDateTimeInfo(dt){
+function getDateTimeInfo(dt) {
     const nowDt = new Date();
     const targetDt = new Date(dt);
 
@@ -6,22 +6,21 @@ function getDateTimeInfo(dt){
     const targetDtSec = parseInt(targetDt.getTime() / 1000);
 
     const diffSec = nowDtSec - targetDtSec;
-    if(diffSec < 120){
+    if(diffSec < 120) {
         return '1분 전';
-    }else if(diffSec < 3600){//분 단위
+    } else if(diffSec < 3600) { //분 단위
         return `${parseInt(diffSec / 60)}분 전`;
-    }else if(diffSec < 86400){//시간 단위
+    } else if(diffSec < 86400) { //시간 단위
         return `${parseInt(diffSec / 3600)}시간 전`;
-    }else if(diffSec < 604800){//일 단위
+    } else if(diffSec < 604800) { //일 단위
         return `${parseInt(diffSec / 86400)}일 전`;
     }
     return targetDt.toLocaleString();
 }
 
 //프로필 화면으로 이동
-function moveToProfile(iuser){
-    console.log(iuser);
-    location.href=`/user/profile?iuser=${iuser}`;
+function moveToProfile(iuser) {
+    location.href = `/user/profile?iuser=${iuser}`;
 }
 
 const feedObj = {
@@ -31,8 +30,8 @@ const feedObj = {
     url: '',
     iuser: 0,
     swiper: null,
-    containerElem: null,
-    loadingElem: null,
+    containerElem: document.querySelector('#feedContainer'),
+    loadingElem: document.querySelector('.loading'),
     makeFeedList: function(data) {
         if(data.length == 0) { return; }
 
@@ -43,20 +42,21 @@ const feedObj = {
             itemContainer.classList.add('item');
 
             // 글쓴이 정보 영역
+            let imgTag = ``;
+            if(item.mainProfile != null) {
+                imgTag = `<img src="/pic/profile/${item.iuser}/${item.mainProfile}" class="pointer profile wh30" 
+                onclick="moveToProfile(${item.iuser});" onerror="this.style.display='none';">`;
+            }
             const regDtInfo = getDateTimeInfo(item.regdt);
             const topDiv = document.createElement('div');
-
             topDiv.classList.add('top')
             topDiv.innerHTML = `
-            <div class="itemProfileCont">
-                <img src="/pic/profile/${item.iuser}/${item.mainProfile}" class="pointer"
-                 onclick="moveToProfile(${item.iuser});" onerror="this.style.display='none';">
-            </div>
+            <div class="itemProfileCont">${imgTag}</div>
             <div>
-                <div><span  class="pointer" onclick="moveToProfile(${item.iuser});">${item.writer}</span> - ${regDtInfo}</div>
+                <div><span class="pointer" onclick="moveToProfile(${item.iuser});">${item.writer}</span> - ${regDtInfo}</div>
                 <div>${item.location == null ? '' : item.location}</div>
             </div>
-        `;
+            `;
             //이미지영역
             const imgDiv = document.createElement('div');
             imgDiv.classList.add('itemImg');
@@ -159,8 +159,8 @@ const feedObj = {
             const cmtInput = document.createElement('input');
             cmtInput.type = 'text';
             cmtInput.placeholder = '댓글을 입력하세요...';
-            cmtInput.addEventListener('keyup', (e)=>{
-                if(e.key === 'Enter'){
+            cmtInput.addEventListener('keyup', (e) => {
+                if(e.key === 'Enter') {
                     cmtBtn.click();
                 }
             });
@@ -201,13 +201,15 @@ const feedObj = {
                                 alert('댓글을 등록할 수 없습니다.');
                                 break;
                             case 1:
-                                //댓글을 추가한다.
+                                //댓글 추가한다.
                                 const globalConstElem = document.querySelector('#globalConst');
-                                const param = {...globalConstElem.dataset};
+
+                                const param = { ...globalConstElem.dataset };
                                 param.cmt = cmtInput.value;
 
                                 const cmtItemDiv = this.makeCmtItem(param);
                                 cmtListDiv.append(cmtItemDiv);
+
                                 cmtInput.value = '';
                                 break;
                         }
@@ -267,11 +269,10 @@ const feedObj = {
         cmtItemProfileDiv.className = 'cmtItemProfile';
         const cmtItemWriterProfileImg = document.createElement('img');
         cmtItemWriterProfileImg.src = `/pic/profile/${iuser}/${writerProfile}`;
-        cmtItemWriterProfileImg.className = 'profile w30 pointer';
-        cmtItemWriterProfileImg.addEventListener('click', ()=>{
-           moveToProfile(iuser);
+        cmtItemWriterProfileImg.className = 'profile wh30 pointer';
+        cmtItemWriterProfileImg.addEventListener('click', () => {
+            moveToProfile(iuser);
         });
-
 
         cmtItemProfileDiv.append(cmtItemWriterProfileImg);
         cmtItemContainerDiv.append(cmtItemProfileDiv);
