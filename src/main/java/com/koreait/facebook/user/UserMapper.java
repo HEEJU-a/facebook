@@ -21,4 +21,6 @@ public interface UserMapper {
     UserFollowEntity selUserFollow(UserFollowEntity param);
     int delUserFollow(UserFollowEntity param);
     List<UserDomain> selUserFollowList(UserFollowEntity param);
+    List<UserDomain> selUserFollowerList(UserFollowEntity param);
+
 }

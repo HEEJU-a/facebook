@@ -151,12 +151,19 @@ public class UserService {
         return res;
     }
     public List<FeedDomain2> selFeedList2(FeedDTO param){
+
         return feedMapper.selFeedList2(param);
     }
     public List<UserDomain> selUserFollowList(UserFollowEntity param){
         param.setIuserMe(auth.getLoginUserPk());
         return mapper.selUserFollowList(param);
     }
+
+    public List<UserDomain> selUserFollowerList(UserFollowEntity param) {
+        param.setIuserMe(auth.getLoginUserPk());
+        return mapper.selUserFollowerList(param);
+    }
+
 
     //팔로우 취소
     public Map<String, Object> delUserFollow(UserFollowEntity param){
@@ -176,5 +183,7 @@ public class UserService {
         }
         return res;
     }
+
+
 
 }
