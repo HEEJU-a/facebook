@@ -3,20 +3,15 @@ package com.koreait.facebook.user;
 import com.koreait.facebook.common.MyConst;
 import com.koreait.facebook.feed.model.FeedDTO;
 import com.koreait.facebook.feed.model.FeedDomain2;
-import com.koreait.facebook.security.UserDetailsImpl;
+import com.koreait.facebook.security.CustomUserPrincipal;
 import com.koreait.facebook.user.model.*;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.jws.soap.SOAPBinding;
-import java.security.Principal;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,7 +54,7 @@ public class UserController {
 //    }
 
     @GetMapping("/profile")
-    public void profile(Model model, UserEntity param, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public void profile(Model model, UserEntity param, @AuthenticationPrincipal CustomUserPrincipal userDetails){
         System.out.println(param);
         UserDTO param2 = new UserDTO();
         param2.setYouIuser(param.getIuser());
