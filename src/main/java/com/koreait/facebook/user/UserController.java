@@ -3,7 +3,7 @@ package com.koreait.facebook.user;
 import com.koreait.facebook.common.MyConst;
 import com.koreait.facebook.feed.model.FeedDTO;
 import com.koreait.facebook.feed.model.FeedDomain2;
-import com.koreait.facebook.security.CustomUserPrincipal;
+import com.koreait.facebook.security.model.CustomUserPrincipal;
 import com.koreait.facebook.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

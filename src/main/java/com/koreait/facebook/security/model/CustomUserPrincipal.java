@@ -1,4 +1,4 @@
-package com.koreait.facebook.security;
+package com.koreait.facebook.security.model;
 
 import com.koreait.facebook.user.model.UserEntity;
 import lombok.Getter;

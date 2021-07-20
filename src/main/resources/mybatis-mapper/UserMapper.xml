@@ -4,11 +4,11 @@
 
 <mapper namespace="com.koreait.facebook.user.UserMapper">
 
-    <insert id="join">
+    <insert id="join"  useGeneratedKeys="true" keyProperty="iuser">
         INSERT INTO t_user
-        (email, pw, nm, tel, authCd)
+        (email, pw, nm, tel, authCd, provider)
         VALUES
-        (#{email}, #{pw}, #{nm}, #{tel}, #{authCd})
+        (#{email}, #{pw}, #{nm}, #{tel}, #{authCd}, #{provider})
     </insert>
 
     <update id="auth">
@@ -21,6 +21,7 @@
         SELECT *
         FROM t_user
         WHERE email = #{email}
+        AND provider = #{provider}
         AND authCd IS NULL
     </select>
 

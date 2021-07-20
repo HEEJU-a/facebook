@@ -1,5 +1,6 @@
 package com.koreait.facebook.security;
 
+import com.koreait.facebook.security.model.CustomUserPrincipal;
 import com.koreait.facebook.user.model.UserEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
