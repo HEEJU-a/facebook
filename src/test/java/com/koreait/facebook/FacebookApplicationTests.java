@@ -17,6 +17,7 @@ class FacebookApplicationTests {
         String txt = "내용입니다<a href=\"http://localhost:8090/user/login\">로그인으로이동</a>";
         email.sendMimeMessage(to, subject, txt);
         
+        
     }
 
 }
