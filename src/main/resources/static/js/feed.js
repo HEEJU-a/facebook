@@ -128,6 +128,7 @@ const feedObj = {
                 ctntDiv.innerText = item.ctnt;
                 ctntDiv.classList.add('itemCtnt');
                 itemContainer.append(ctntDiv);
+                
             }
 
             //댓글 영역
