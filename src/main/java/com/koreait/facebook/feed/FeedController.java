@@ -67,5 +67,6 @@ public class FeedController {
     @GetMapping("/cmt")
     public List<FeedCmtDomain> cmtList(FeedCmtEntity param){
         return service.selFeedCmtList(param);
+        
     }
 }
