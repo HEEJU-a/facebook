@@ -49,6 +49,7 @@ public class FeedController {
         return service.selFeedList2(param);
     }
 
+    
     @ResponseBody
     @GetMapping("/fav")
     public int favProc(FeedFavEntity param, int type){//type 1 : ins(좋아요 등록), type: 0 : del(좋아요 취소)
