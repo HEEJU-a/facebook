@@ -69,5 +69,6 @@ public class FeedController {
     public List<FeedCmtDomain> cmtList(FeedCmtEntity param){
         return service.selFeedCmtList(param);
         
+        
     }
 }
